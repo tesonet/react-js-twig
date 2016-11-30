@@ -1,5 +1,9 @@
 # ReactJs Twig
 
+[![Latest Stable Version](https://poser.pugx.org/tesonet/react-js-twig/v/stable)](https://packagist.org/packages/tesonet/react-js-twig)
+[![Total Downloads](https://poser.pugx.org/tesonet/react-js-twig/downloads)](https://packagist.org/packages/tesonet/react-js-twig)
+[![License](https://poser.pugx.org/tesonet/react-js-twig/license)](https://packagist.org/packages/tesonet/react-js-twig)
+
 This library simplifies server rendering using ReactJs and Twig.
 
 ## Prerequisites
