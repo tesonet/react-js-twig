@@ -12,7 +12,7 @@ So in order to use this library you have to [install v8js](https://github.com/ph
 
 ## Dependencies
 - Composer
-- PHP >= 5.6
+- PHP >= 7.0
 - V8Js php extension
 
 ## Usage

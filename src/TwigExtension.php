@@ -75,7 +75,7 @@ class TwigExtension extends \Twig_Extension
      */
     private function createReactJs($sourcePath)
     {
-        $reactSource = $this->loader->getSource($sourcePath);
+        $reactSource = $this->loader->getSourceContext($sourcePath)->getCode();
         $reactJs = new ReactJS($reactSource, '');
         $reactJs->setErrorHandler($this->errorHandler);
         return $reactJs;
