@@ -1,9 +1,14 @@
 <?php
+
 namespace Tesonet\ReactJsTwig;
 
 use ReactJS;
 
-class TwigExtension extends \Twig_Extension
+use Twig_Extension;
+use Twig_SimpleFunction;
+use Twig_LoaderInterface;
+
+class TwigExtension extends Twig_Extension
 {
     /**
      * @var Callable
@@ -11,7 +16,7 @@ class TwigExtension extends \Twig_Extension
     private $errorHandler;
 
     /**
-     * @var \Twig_LoaderInterface
+     * @var Twig_LoaderInterface
      */
     private $loader;
 
@@ -22,22 +27,20 @@ class TwigExtension extends \Twig_Extension
         };
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'react-js-twig';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('reactGenerateMarkup', [$this, 'reactGenerateMarkup'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction(
+            new Twig_SimpleFunction(
+                'reactGenerateMarkup',
+                [$this, 'reactGenerateMarkup'],
+                ['is_safe' => ['html']]
+            ),
+            new Twig_SimpleFunction(
                 'reactGenerateJavascript',
                 [$this, 'reactGenerateJavascript'],
                 ['is_safe' => ['html']]
@@ -45,55 +48,39 @@ class TwigExtension extends \Twig_Extension
         ];
     }
 
-    /**
-     * @param array $reactConfiguration
-     * @return string
-     */
-    public function reactGenerateMarkup($reactConfiguration)
+    public function reactGenerateMarkup(array $reactConfiguration): string
     {
         $reactJs = $this->createReactJs($reactConfiguration['sourcePath']);
         $reactJs->setComponent($reactConfiguration['componentName'], $reactConfiguration['props']);
         return $reactJs->getMarkup();
     }
 
-    /**
-     * @param array $reactConfiguration
-     * @return string
-     */
-    public function reactGenerateJavascript($reactConfiguration)
+    public function reactGenerateJavascript(array $reactConfiguration): string
     {
         $reactJs = $this->createReactJs($reactConfiguration['sourcePath']);
         $reactJs->setComponent($reactConfiguration['componentName'], $reactConfiguration['props']);
         return $reactJs->getJS($reactConfiguration['where']);
     }
 
-    /**
-     * @param string $sourcePath
-     * @return ReactJS
-     *
-     * @throws \Exception
-     */
-    private function createReactJs($sourcePath)
+    private function createReactJs(string $sourcePath): ReactJS
     {
-        $reactSource = $this->loader->getSource($sourcePath);
+        $reactSource = $this->loader->getSourceContext($sourcePath)->getCode();
         $reactJs = new ReactJS($reactSource, '');
         $reactJs->setErrorHandler($this->errorHandler);
         return $reactJs;
     }
 
-    /**
-     * @param Callable $errorHandler
-     */
-    public function setErrorHandler($errorHandler)
+    public function setErrorHandler(callable $errorHandler): self
     {
         $this->errorHandler = $errorHandler;
+
+        return $this;
     }
 
-    /**
-     * @param \Twig_LoaderInterface $loader
-     */
-    public function setLoader($loader)
+    public function setLoader(Twig_LoaderInterface $loader): self
     {
         $this->loader = $loader;
+
+        return $this;
     }
 }
